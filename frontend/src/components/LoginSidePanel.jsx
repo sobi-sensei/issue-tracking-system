@@ -1,6 +1,6 @@
 const LoginSidePanel = () => {
   return (
-    <div className="hidden md:flex w-[55%] bg-indigo-950 relative overflow-hidden border-r border-gray-600">
+    <div className="hidden md:flex w-[50%] bg-indigo-950 relative overflow-hidden border-r border-gray-600">
 
         <div className="absolute -top-30 -left-30 w-62 h-62 bg-indigo-500/20 rounded-full blur-3xl"></div>
         <div className="absolute -top-30 -left-30 w-85 h-85 bg-indigo-500/20 rounded-full blur-3xl"></div>
