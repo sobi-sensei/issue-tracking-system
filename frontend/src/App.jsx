@@ -1,16 +1,21 @@
+import { Toaster } from 'react-hot-toast'
 import { Routes, Route } from 'react-router-dom'
 
-import Login from './pages/Login'
+import LoginLanding from './pages/LoginLanding'
+import LoginForm from './components/LoginForm'
 import './App.css'
 
-function App() {
+const App = () => {
 
   return (
-    <div>
+    <>
+      <Toaster />
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/login' element={ <LoginLanding/> } />
+        <Route path='/login/admin' element={ <LoginForm/> } />
+        <Route path='/login/member' element={ <LoginForm/> } />
       </Routes>
-    </div>
+    </>
   )
 }
 
