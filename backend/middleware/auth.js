@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
-import pool from '../config/db'
+import pool from '../config/db.js'
 
-export const protected = async (req, res, next) => {
+const protect = async (req, res, next) => {
     try {
         const token = req.cookies.token;
 
@@ -25,3 +25,5 @@ export const protected = async (req, res, next) => {
         res.status(401).json({ message: 'Authorization failed!' });
     }
 }
+
+export default protect

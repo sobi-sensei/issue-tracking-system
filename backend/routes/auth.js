@@ -1,8 +1,8 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import pool from '../config/db'
-import protect from '../middleware/auth'
+import pool from '../config/db.js'
+import protect from '../middleware/auth.js'
 
 const router = express.Router();
 
@@ -13,12 +13,14 @@ const cookieOptions = {
 }
 
 const generateToken = (id) => {
-    return jwt.sign((id), process.env.JWT_SECRET, {
+    return jwt.sign(
+        { id },
+        process.env.JWT_SECRET, {
         expiresIn: '30d'
     });
 }
 
-router.post('/login/admin', async (req, res) => {
+router.post('/register/admin', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -27,7 +29,7 @@ router.post('/login/admin', async (req, res) => {
 
     const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-    if (userExists.rows.lenght > 0) {
+    if (userExists.rows.length > 0) {
         return res.status(400).json({ message: "Email already in use." });
     }
 
@@ -35,8 +37,8 @@ router.post('/login/admin', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await pool.query(
-        'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
-        [username, email, hashedPassword]
+        'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
+        [name, email, hashedPassword]
     );
 
     const token = generateToken(newUser.rows[0].id);
