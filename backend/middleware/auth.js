@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import pool from '../config/db'
 
-export const protected = async (req, res, next) => {
+export const protect = async (req, res, next) => {
     try {
         const token = req.cookies.token;
 
