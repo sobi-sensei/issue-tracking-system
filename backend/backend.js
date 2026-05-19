@@ -1,8 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import cookieParser from 'cookieparser'
-import authRoutes from './routes/auth'
+import cookieParser from 'cookie-parser'
+import authRoutes from './routes/auth.js'
 
 dotenv.config();
 
@@ -25,5 +25,5 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log('backend bhaag rha hy port ${PORT} pe');
+    console.log(`backend bhaag rha hy port ${PORT} pe`);
 })
