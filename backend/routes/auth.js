@@ -76,7 +76,7 @@ router.post('/login/admin', async (req, res) => {
 
     res.cookie('token', token, cookieOptions);
 
-    res.json({ user: { id:userData.id, username: userData.username, email: userData.email }});
+    res.json({ user: { id:userData.id, name: userData.name, email: userData.email }});
 })
 
 

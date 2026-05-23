@@ -1,18 +1,54 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowLeftIcon, EyeOffIcon, EyeIcon } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { ArrowLeftIcon, EyeOffIcon, EyeIcon, Loader2Icon } from 'lucide-react'
 import LoginSidePanel from './LoginSidePanel'
 
-const LoginForm = ({role, title, subtitle}) => {
+const LoginForm = ({role, title, subtitle, setUser}) => {
   
+  // const [form, setForm] = useState({
+  //   email: '',
+  //   password: ''
+  // })
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await axios.post(`http://localhost:5000/api/auth/login/${role}`, {
+        email,
+        password
+      })
+
+      setUser(response.data)
+      
+      navigate('/')
+    
+    } catch (err) {
+    
+      console.log(err.response?.data)
+
+      setError(
+        err.response?.data?.message ||
+        'Invalid email or password'
+      )
+    
+    } finally {
+
+      setLoading(false)
+
+    }
   }
   
   return (
