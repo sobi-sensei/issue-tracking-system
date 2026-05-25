@@ -9,7 +9,7 @@ An Internal Issue Tracking and Workflow System using:<br>
 ● Axios<br>
 ● React Router DOM<br>
 ● Lucide React Icons<br>
-<br>
+
 ### Backend<br>
 ● Node.js<br>
 ● Express.js<br>
