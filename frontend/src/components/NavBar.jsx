@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import {} from 'lucide-react'
+import { MenuIcon } from 'lucide-react'
 import { dummyData } from '../assets/assets'
 
 const NavBar = () => {
   
-    const { pathname } = useLocation
+    const { pathname } = useLocation()
     const [userName, setUserName] = useState('')
     const [mobileOpen, setMobileOpen] = useState(false)
 

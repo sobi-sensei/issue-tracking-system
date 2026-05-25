@@ -31,9 +31,11 @@ const LoginForm = ({role, title, subtitle, setUser}) => {
         password
       })
 
-      setUser(response.data)
+      console.log(response.data)
+
+      setUser(response.data.user)
       
-      navigate('/')
+      navigate('/dashboard')
     
     } catch (err) {
     
