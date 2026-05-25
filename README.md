@@ -1,9 +1,8 @@
 # Issue Tracking System
 An Internal Issue Tracking and Workflow System using:
 <br>
-## 🚀 Tech Stack<br>
-<br>
-### Frontend<br>
+🚀 Tech Stack<br>
+--- Frontend<br>
 ● React<br>
 ● Vite<br>
 ● Tailwind CSS<br>
