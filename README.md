@@ -2,7 +2,7 @@
 An Internal Issue Tracking and Workflow System using:<br>
 <br>
 🚀 Tech Stack<br><br>
---- Frontend<br>
+### Frontend<br>
 ● React<br>
 ● Vite<br>
 ● Tailwind CSS<br>
