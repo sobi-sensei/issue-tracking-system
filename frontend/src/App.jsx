@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import axios from 'axios'
 
 import LoginLanding from './pages/LoginLanding'
 import LoginForm from './components/LoginForm'
+import Landing from './pages/Landing'
+import RegisterForm from './components/RegisterForm'
+import Layout from './pages/Layout'
 import './App.css'
 
 axios.defaults.withCredentials = true
@@ -12,7 +15,6 @@ axios.defaults.withCredentials = true
 const App = () => {
 
   const [user, setUser] = useState(null)
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -37,9 +39,80 @@ const App = () => {
     <>
       <Toaster />
       <Routes>
-        <Route path='/login' element={ <LoginLanding/> } />
-        <Route path='/login/admin' element={ <LoginForm role='admin' title='Admin Portal' subtitle='Sign in to manage your crew' setUser={setUser}/> } />
-        <Route path='/login/member' element={ <LoginForm role='member' title='Member Portal' subtitle='Sign in to access your account'/> } />
+        <Route
+          path='/' 
+          element={
+            user 
+              ? <Navigate to='/dashboard' /> 
+              : <Navigate to='/auth' />}/>
+
+        <Route 
+          path='/auth' 
+          element={<Landing />}/>
+
+        <Route 
+          path='/login' 
+          element={ <LoginLanding mode='login'/> }/>
+
+        <Route 
+          path='/login/admin' 
+          element={ 
+            <LoginForm 
+              role='admin' 
+              title='Admin Portal'
+              subtitle='Sign in to manage your crew' 
+              setUser={setUser}/> 
+          } />
+
+        <Route 
+          path='/login/member' 
+          element={
+            <LoginForm 
+              role='member' 
+              title='Member Portal'
+              subtitle='Sign in to access your account' 
+              setUser={setUser} />
+          } />
+
+        <Route 
+          path='/register' 
+          element={
+          <LoginLanding mode='register' />} />
+        
+        <Route 
+          path='/register/admin' 
+          element={
+            <RegisterForm 
+              role='admin' 
+              title='Admin Registration'
+              subtitle='Create your admin account'
+              setUser={setUser} />
+          }/>
+
+        <Route 
+          path='/register/member' 
+          element={
+            <RegisterForm 
+              role='member' 
+              title='Member Registration'
+              subtitle='Create your member account' 
+              setUser={setUser} />
+            }/>
+        
+        <Route
+          path='/dashboard'
+          element={
+            user
+              ? <Layout />
+              : <Navigate to='/login' />
+          }
+        >
+          <Route
+            index
+            element={<h1>Dashboard</h1>}
+          />
+        </Route>
+
       </Routes>
     </>
   )

@@ -15,12 +15,18 @@ const cookieOptions = {
 const generateToken = (id) => {
     return jwt.sign(
         { id },
-        process.env.JWT_SECRET, {
-        expiresIn: '30d'
-    });
+        process.env.JWT_SECRET, 
+        {
+            expiresIn: '30d'
+        }
+    );
 }
 
-router.post('/register/admin', async (req, res) => {
+// Register handler
+
+// router.post('/register/admin', async (req, res) => {
+const handleRegister = (role) => async (req, res) => {
+
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -29,6 +35,7 @@ router.post('/register/admin', async (req, res) => {
 
     const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
+    //checking to see if email already in database
     if (userExists.rows.length > 0) {
         return res.status(400).json({ message: "Email already in use." });
     }
@@ -36,9 +43,10 @@ router.post('/register/admin', async (req, res) => {
     // hashing password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // registering user in databse
     const newUser = await pool.query(
-        'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
-        [name, email, hashedPassword]
+        'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role',
+        [name, email, hashedPassword, role]
     );
 
     const token = generateToken(newUser.rows[0].id);
@@ -47,21 +55,26 @@ router.post('/register/admin', async (req, res) => {
     res.cookie('token', token, cookieOptions);
 
     return res.status(201).json({ user: newUser.rows[0] });
-})
+}
 
 
-// for Login
+// Login handler
 
-router.post('/login/admin', async (req, res) => {
+// router.post('/login/admin', async (req, res) => {
+const handleLogin = (role) => async (req, res) => {
+
     const { email, password } = req.body;
+
     if (!email || !password) {
         return res.status(400).json({ message: 'Enter all the required fields' });
     }
 
-    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+    // querying database
+    const user = await pool.query('SELECT * FROM users WHERE email = $1 AND role = $2', [email, role])
+
 
     if (user.rows.length === 0) {
-        return res.status(400).json({ message: 'Invalid email' });
+        return res.status(400).json({ message: 'Not authorized' });
     }
 
     const userData = user.rows[0];
@@ -76,8 +89,20 @@ router.post('/login/admin', async (req, res) => {
 
     res.cookie('token', token, cookieOptions);
 
-    res.json({ user: { id:userData.id, name: userData.name, email: userData.email }});
-})
+    res.json({ 
+        user: { 
+            id: userData.id, 
+            name: userData.name, 
+            email: userData.email,
+            role: userData.role
+        }
+    });
+}
+
+router.post('/register/admin', handleRegister('admin'))
+router.post('/register/member', handleRegister('member'))
+router.post('/login/admin', handleLogin('admin'))
+router.post('/login/member', handleLogin('member'))
 
 
 router.get('/me', protect, async (req, res) => {
