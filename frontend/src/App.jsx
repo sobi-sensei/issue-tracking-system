@@ -8,6 +8,7 @@ import LoginForm from './components/LoginForm'
 import Landing from './pages/Landing'
 import RegisterForm from './components/RegisterForm'
 import Layout from './pages/Layout'
+import Dashboard from './pages/Dashboard'
 import './App.css'
 
 axios.defaults.withCredentials = true
@@ -103,13 +104,13 @@ const App = () => {
           path='/dashboard'
           element={
             user
-              ? <Layout />
+              ? <Layout user={user} />
               : <Navigate to='/login' />
           }
         >
           <Route
             index
-            element={<h1>Dashboard</h1>}
+            element={<Dashboard/>}
           />
         </Route>
 
